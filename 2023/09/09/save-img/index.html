@@ -13,7 +13,7 @@
 
 
 
-<title>hexo成功部署github后，出现白屏问题 | Hexo</title>
+<title>QPixmap保存至本地图片 | Hexo</title>
 
 
 
@@ -286,7 +286,7 @@ i()
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">hexo成功部署github后，出现白屏问题</h1>
+            <h1 class="post-title">QPixmap保存至本地图片</h1>
             
                 <div class="post-meta">
                     
@@ -295,14 +295,14 @@ i()
 
                     
                         <span class="post-time">
-                        Date: <a href="#">September 4, 2023&nbsp;&nbsp;0:31:31</a>
+                        Date: <a href="#">September 9, 2023&nbsp;&nbsp;23:15:24</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/blogs/">blogs</a>
+                                <a href="/categories/Qt/">Qt</a>
                             
                         </span>
                     
@@ -311,36 +311,14 @@ i()
         </header>
 
         <div class="post-content">
-            <h3 id="1-nexo-d-部署出错"><a href="#1-nexo-d-部署出错" class="headerlink" title="1. nexo d 部署出错"></a>1. nexo d 部署出错</h3><p>可以执行下面代码</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global --<span class="built_in">unset</span> http.proxy </span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
+            <h2 id="保存-QPixmap-的路径"><a href="#保存-QPixmap-的路径" class="headerlink" title="保存 QPixmap 的路径"></a>保存 <code>QPixmap</code> 的路径</h2><h3 id="1-文件名"><a href="#1-文件名" class="headerlink" title="1. 文件名"></a>1. 文件名</h3><p><code>filename</code><font color = "#FF0000">不能用</font> <code>:</code><font color = "#FF0000">分割时间</font></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取当前时间作为文件名的一部分</span></span><br><span class="line">QDateTime currentDateTime = QDateTime::<span class="built_in">currentDateTime</span>();</span><br><span class="line">QString fileName = <span class="string">&quot;img_&quot;</span> +currentDateTime.<span class="built_in">toString</span>(<span class="string">&quot;yyyyMMdd_HH_mm_ss&quot;</span>) + <span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="comment">//filename不能用:分割时间</span></span><br></pre></td></tr></table></figure>
 
-<hr>
-<h3 id="2-成功部署后，出现白屏"><a href="#2-成功部署后，出现白屏" class="headerlink" title="2. 成功部署后，出现白屏"></a>2. 成功部署后，出现白屏</h3><ul>
-<li>先 <code>hexo clean</code> 再 <code>hexo d -g </code> ，看是否成功。笔者到这一步可以显示博客网址 <a href="%60https://%60%E2%80%B8yzi321.github.io">https://yzi321.github.io</a></li>
-</ul>
-<hr>
-<h3 id="3-参考博客"><a href="#3-参考博客" class="headerlink" title="3. 参考博客"></a>3. 参考博客</h3><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/363375161/answer/955247905">https://www.zhihu.com/question/363375161/answer/955247905</a></p>
-<p>具体步骤：</p>
-<ol>
-<li><p>本地测试  Hexo 是否正确安装。</p>
-<p> <strong>运行</strong> <code>hexo s</code>, 如果 hexo 安装正确会出现如下内容</p>
- <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INFO  Validating config</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/ . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>先</strong> <code>hexo clean</code> <strong>再</strong> <code>hexo d -g </code>。 如果成功，最后应该会显示，</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nothing to commit, working tree clean</span><br><span class="line">Everything up-to-date</span><br><span class="line">branch &#x27;master&#x27; set up to track &#x27;https://github.com/Yzi321/Yzi321.github.io.git/master&#x27;.</span><br><span class="line">INFO  Deploy done: git</span><br></pre></td></tr></table></figure></li>
-<li><p>前两步都没问题，就该检查 github 仓库了。</p>
-<p> 打开你的 github 上名为 <code>xxx.github.io</code> 的仓库，如果部署正确上面应该会有内容的。至少会有一个 <code>index.html</code> 之类的文件。</p>
-</li>
-<li><p>如果你能找到 <code>index.html</code> 文件，但是还是打不开你的网站，那说明很有可能 github page 相关配置出了问题。</p>
-<p> 可以做一个简单的测试。把 <code>xxx.github.io</code> 仓库下的内容全部删除了，新建一个 <code>index.html</code> 文件，输入如下内容：</p>
- <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span> hexo test</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>hexo test<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span> hello world <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-绝对地址"><a href="#2-绝对地址" class="headerlink" title="2. 绝对地址"></a>2. 绝对地址</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Qsting current = QDir::<span class="built_in">currentPath</span>();<span class="comment">//当前文件绝对地址</span></span><br><span class="line">QString path = current + <span class="string">&quot;/image/&quot;</span></span><br><span class="line"><span class="built_in">Qdir</span>().<span class="built_in">mkpath</span>(path);<span class="comment">//不存在就创造文件夹</span></span><br><span class="line"></span><br><span class="line">Qstring savefilepath = path + filename;</span><br><span class="line"></span><br><span class="line"><span class="built_in">If</span>(!pixmap.<span class="built_in">isnull</span>())</span><br><span class="line">    Pixmap.<span class="built_in">save</span>(savefilepath);</span><br></pre></td></tr></table></figure>
 
-<p> 然后你在浏览器打开 <code>xxx.github.io</code></p>
-<p> 如果打开没问题，能看到 hello world, 说明你的 github 仓库配置没问题，你需要检查你的 hexo 是不是正确上传到了 github.</p>
-<p> 如果打开还是一片空白，建议你删了这个仓库，找个教程重新新建一个仓库。</p>
-</li>
-</ol>
-<hr>
+<h3 id="3-相对地址"><a href="#3-相对地址" class="headerlink" title="3. 相对地址"></a>3. 相对地址</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式一：</span></span><br><span class="line">QString savefilepath = <span class="string">&quot;image/&quot;</span> + filename;</span><br><span class="line"><span class="comment">//方式二：</span></span><br><span class="line">QString savefilepath = <span class="string">&quot;./image/&quot;</span> + filename;</span><br><span class="line"></span><br><span class="line"><span class="built_in">If</span>(!pixmap.<span class="built_in">isnull</span>())</span><br><span class="line">    Pixmap.<span class="built_in">save</span>(savefilepath);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-直接文件名保存"><a href="#4-直接文件名保存" class="headerlink" title="4. 直接文件名保存"></a>4. 直接文件名保存</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">QString savefilepath = filename;<span class="comment">//filename 不能用:分割时间</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">If</span>(!pixmap.<span class="built_in">isnull</span>())</span><br><span class="line">    Pixmap.<span class="built_in">save</span>(savefilepath);</span><br></pre></td></tr></table></figure>
 
         </div>
 
@@ -355,7 +333,7 @@ i()
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://yzi321.github.io/2023/09/04/Open404/">https://yzi321.github.io/2023/09/04/Open404/</a></span>
+                        <span><a href="https://yzi321.github.io/2023/09/09/save-img/">https://yzi321.github.io/2023/09/09/save-img/</a></span>
                     </p>
                 
                 
@@ -379,13 +357,11 @@ i()
                 <span class="tag">
                     
                     
-                        <a href="/tags/404/"># 404</a>
+                        <a href="/tags/qt/"># qt</a>
                     
-                        <a href="/tags/problem/"># problem</a>
+                        <a href="/tags/QPixmap/"># QPixmap</a>
                     
-                        <a href="/tags/github/"># github</a>
-                    
-                        <a href="/tags/hexo/"># hexo</a>
+                        <a href="/tags/save/"># save</a>
                     
                         
                 </span>
@@ -398,10 +374,8 @@ i()
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/09/09/save-img/">QPixmap保存至本地图片</a>
             
-            
-            <a class="next" rel="next" href="/2023/09/03/hello-world/">Hello World</a>
+            <a class="next" rel="next" href="/2023/09/04/Open404/">hexo成功部署github后，出现白屏问题</a>
             
         </section>
 
