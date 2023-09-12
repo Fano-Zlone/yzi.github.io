@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Yzi">
+
+
+
+
+
+<title>实现自定义qt标题栏，替代原有标题 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+        !
+        function() {
+        function n(n, e, t) {
+        return n.getAttribute(e) || t
+        }
+        function e(n) {
+        return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+o = t.length,
+i = t[o - 1];
+return {
+l: o,
+z: n(i, "zIndex", -1), //置于主页面背后
+o: n(i, "opacity", .5), //线条透明度
+c: n(i, "color", "0,0,0"), //线条颜色
+n: n(i, "count", 100) //线条数量
+}
+}
+function o() {
+a = m.width = window.innerWidth ||
+document.documentElement.clientWidth || document.body.clientWidth,
+c = m.height = window.innerHeight ||
+document.documentElement.clientHeight || document.body.clientHeight
+}
+function i() {
+r.clearRect(0, 0, a, c);
+var n, e, t, o, m, l;
+s.forEach(function(i, x) {
+for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+}),
+x(i)
+}
+var a, c, u, m = document.createElement("canvas"),
+d = t(),
+l = "c_n" + d.l,
+r = m.getContext("2d"),
+x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+function(n) {
+window.setTimeout(n, 1e3 / 45)
+},
+w = Math.random,
+y = {
+x: null,
+y: null,
+max: 2e4
+};
+m.id = l,
+m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+e("body")[0].appendChild(m),
+o(),
+window.onresize = o,
+window.onmousemove = function(n) {
+n = n || window.event,
+y.x = n.clientX,
+y.y = n.clientY
+},
+window.onmouseout = function() {
+y.x = null,
+y.y = null
+};
+for (var s = [], f = 0; d.n > f; f++) {
+var h = w() * a,
+g = w() * c,
+v = 2 * w() - 1,
+p = 2 * w() - 1;
+s.push({
+x: h,
+y: g,
+xa: v,
+ya: p,
+max: 6e3
+})
+}
+u = s.concat([y]),
+setTimeout(function() {
+i()
+},
+100)
+} ();
+</script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Yzi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Yzi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">实现自定义qt标题栏，替代原有标题</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Yzi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 12, 2023&nbsp;&nbsp;21:10:10</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Qt/">Qt</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="🌹步骤："><a href="#🌹步骤：" class="headerlink" title="🌹步骤："></a>🌹步骤：</h2><p>⭐ 隐藏原有标题栏<br>⭐ 新建自定义风格标题栏，继承widget<br>⭐ 新标题栏的内容都要放在<code>QHBoxLayout</code>中</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">QHBoxLayout *layout = <span class="keyword">new</span> QHBoxLayout;</span><br><span class="line">layout-&gt;<span class="built_in">setContentsMargins</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//....</span></span><br><span class="line"><span class="comment">//自行添加需要的控件到新标题栏</span></span><br></pre></td></tr></table></figure>
+
+<p>⭐ 同时定义另一个<code>QHBoxLayout</code>,用来存放<code>menubar</code>（因为新标题栏只能通过覆盖原有的<code>menubar</code>进行显示）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">layout2 = <span class="keyword">new</span> QHBoxLayout;</span><br><span class="line">layout2-&gt;<span class="built_in">setContentsMargins</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>⭐ 将<code>layout</code>放置在<code>QVBoxLayout</code>中，同时<code>QVBoxLayout</code>的<code>parent</code>设为<code>this</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建标题栏的布局</span></span><br><span class="line">layoutV= <span class="keyword">new</span> <span class="built_in">QVBoxLayout</span>(<span class="keyword">this</span>);</span><br><span class="line">layoutV-&gt;<span class="built_in">setContentsMargins</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">layoutV-&gt;<span class="built_in">addLayout</span>(layout);</span><br></pre></td></tr></table></figure>
+
+<p>⭐ 在<code>mainwindow</code>中，将原有<code>menubar</code>添加至第二个<code>QHBoxLayout</code>, 并把<code>layout2</code>添加进<code>QVBoxLayout</code>  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">QMenuBar *menuBar = <span class="keyword">this</span>-&gt;ui-&gt;menuBar; <span class="comment">// 获取菜单栏</span></span><br><span class="line">titleBar-&gt;layout2-&gt;<span class="built_in">addWidget</span>(menuBar);</span><br><span class="line">titleBar-&gt;layoutV-&gt;<span class="built_in">addLayout</span>(titleBar-&gt;layout2);</span><br></pre></td></tr></table></figure>
+
+<p>⭐ 最后通过<code>setMenuWidget</code>设置<code>mainwindow</code>的菜单为<code>titleBar</code>  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>-&gt;<span class="built_in">setMenuWidget</span>(titleBar);</span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<h2 id="🌹注意："><a href="#🌹注意：" class="headerlink" title="🌹注意："></a>🌹注意：</h2><blockquote>
+<p>当我们使用自定义标题栏，原有的 <strong>点击窗口拖动功能</strong> 和 <strong>点击窗口边缘控制窗口尺寸功能</strong> ，都会消失。<br>一般会重写这两个功能，其中窗口拖动功能已经在下方代码中。</p>
+</blockquote>
+<hr>
+<h2 id="🌹源代码"><a href="#🌹源代码" class="headerlink" title="🌹源代码"></a>🌹源代码</h2><ul>
+<li>🏆 <code>ins_titlebar.h</code>文件<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> INS_TITLEBAR_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INS_TITLEBAR_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QMouseEvent&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QVBoxLayout&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QWidget&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">INS_TitleBar</span> : <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">INS_TitleBar</span><span class="params">(QWidget *parent = <span class="literal">nullptr</span>)</span></span>;</span><br><span class="line">    QVBoxLayout *layoutV;</span><br><span class="line">    QHBoxLayout *layout;</span><br><span class="line">    QHBoxLayout *layout2;</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">minimizeClicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">maximizeOrRestoreClicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">closeClicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">minimizeWindow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="function">emit <span class="title">minimizeClicked</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">maximizeOrRestoreWindow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="function">emit <span class="title">maximizeOrRestoreClicked</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">closeWindow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="function">emit <span class="title">closeClicked</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">mousePressEvent</span><span class="params">(QMouseEvent *event)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (event-&gt;<span class="built_in">button</span>() == Qt::LeftButton) &#123;</span><br><span class="line">            isMousePressed = <span class="literal">true</span>;</span><br><span class="line">            <span class="comment">// 记录当前鼠标位置和窗口位置，用于计算移动偏移</span></span><br><span class="line">            mousePressPos = event-&gt;<span class="built_in">globalPos</span>();</span><br><span class="line">            windowPos = <span class="keyword">this</span>-&gt;<span class="built_in">window</span>()-&gt;<span class="built_in">pos</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">mouseMoveEvent</span><span class="params">(QMouseEvent *event)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isMousePressed) &#123;</span><br><span class="line">            <span class="comment">// 计算移动偏移</span></span><br><span class="line">            QPoint moveOffset = event-&gt;<span class="built_in">globalPos</span>() - mousePressPos;</span><br><span class="line">            <span class="comment">// 设置窗口新的位置</span></span><br><span class="line">            <span class="keyword">this</span>-&gt;<span class="built_in">window</span>()-&gt;<span class="built_in">move</span>(windowPos + moveOffset);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">mouseReleaseEvent</span><span class="params">(QMouseEvent *event)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        <span class="built_in">Q_UNUSED</span>(event);</span><br><span class="line">        isMousePressed = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">bool</span> isMousePressed;</span><br><span class="line">    QPoint mousePressPos;</span><br><span class="line">    QPoint windowPos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// INS_TITLEBAR_H</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<ul>
+<li>🏆 <code>ins_titlebar.cpp</code>文件<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ins_titlebar.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QWidget&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QHBoxLayout&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QPushButton&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QLabel&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QPixmap&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QMouseEvent&gt;</span></span></span><br><span class="line"></span><br><span class="line">INS_TitleBar::<span class="built_in">INS_TitleBar</span>(QWidget *parent)</span><br><span class="line">    : QWidget&#123;parent&#125;</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// 创建标题栏的布局</span></span><br><span class="line">        layoutV= <span class="keyword">new</span> <span class="built_in">QVBoxLayout</span>(<span class="keyword">this</span>);</span><br><span class="line">        layoutV-&gt;<span class="built_in">setContentsMargins</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//存放title</span></span><br><span class="line">        layout = <span class="keyword">new</span> QHBoxLayout;</span><br><span class="line">        layout-&gt;<span class="built_in">setContentsMargins</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">//存放menubar</span></span><br><span class="line">        layout2 = <span class="keyword">new</span> QHBoxLayout;</span><br><span class="line">        layout2-&gt;<span class="built_in">setContentsMargins</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加窗口图标</span></span><br><span class="line">        QLabel *iconLabel = <span class="keyword">new</span> <span class="built_in">QLabel</span>(<span class="keyword">this</span>);</span><br><span class="line">        <span class="function">QPixmap <span class="title">iconPixmap</span><span class="params">(<span class="string">&quot;:/your_ico.png&quot;</span>)</span></span>; <span class="comment">// 替换成你的图标文件路径</span></span><br><span class="line">        iconLabel-&gt;<span class="built_in">setPixmap</span>(iconPixmap.<span class="built_in">scaled</span>(<span class="number">125</span>, <span class="number">35</span>));</span><br><span class="line">        layout-&gt;<span class="built_in">addWidget</span>(iconLabel);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加窗口标题</span></span><br><span class="line">        QLabel *titleLabel = <span class="keyword">new</span> <span class="built_in">QLabel</span>(<span class="string">u8&quot;your title text&quot;</span>, <span class="keyword">this</span>);</span><br><span class="line">        titleLabel-&gt;<span class="built_in">setStyleSheet</span>(<span class="string">&quot;color:white; font:13px;&quot;</span>);</span><br><span class="line">        layout-&gt;<span class="built_in">addWidget</span>(titleLabel);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加 spacer</span></span><br><span class="line">        QSpacerItem *spacer = <span class="keyword">new</span> <span class="built_in">QSpacerItem</span>(<span class="number">40</span>, <span class="number">20</span>, QSizePolicy::Expanding, QSizePolicy::Minimum);</span><br><span class="line">        layout-&gt;<span class="built_in">addSpacerItem</span>(spacer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加最小化按钮</span></span><br><span class="line">        QSize size = <span class="built_in">QSize</span>(<span class="number">25</span>,<span class="number">25</span>);</span><br><span class="line">        QPushButton *minimizeButton = <span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">u8&quot;―&quot;</span>, <span class="keyword">this</span>);</span><br><span class="line">        minimizeButton-&gt;<span class="built_in">setFixedSize</span>(size);</span><br><span class="line">        layout-&gt;<span class="built_in">addWidget</span>(minimizeButton);</span><br><span class="line">        minimizeButton-&gt;<span class="built_in">setStyleSheet</span>(<span class="string">&quot;QPushButton&#123;background:black; &quot;</span></span><br><span class="line">                                      <span class="string">&quot;border:none;border-radius:3px; &quot;</span></span><br><span class="line">                                      <span class="string">&quot;color:rgb(241, 241, 241);&#125;&quot;</span></span><br><span class="line">                                      <span class="string">&quot;QPushButton:hover &#123; &quot;</span></span><br><span class="line">                                      <span class="string">&quot;background-color: rgb(46, 46, 46); &#125;&quot;</span>); <span class="comment">// 启用悬停颜色变化</span></span><br><span class="line">        <span class="built_in">connect</span>(minimizeButton, &amp;QPushButton::clicked, <span class="keyword">this</span>, &amp;INS_TitleBar::minimizeWindow);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加最大化/还原按钮</span></span><br><span class="line">        QPushButton *maximizeButton = <span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">u8&quot;□&quot;</span>, <span class="keyword">this</span>);</span><br><span class="line">        maximizeButton-&gt;<span class="built_in">setFixedSize</span>(size);</span><br><span class="line">        layout-&gt;<span class="built_in">addWidget</span>(maximizeButton);</span><br><span class="line">        maximizeButton-&gt;<span class="built_in">setStyleSheet</span>(<span class="string">&quot;QPushButton&#123;background:black;&quot;</span></span><br><span class="line">                                      <span class="string">&quot;border:none;border-radius:3px; &quot;</span></span><br><span class="line">                                      <span class="string">&quot;color:rgb(241, 241, 241);&#125;&quot;</span></span><br><span class="line">                                      <span class="string">&quot;QPushButton:hover &#123; &quot;</span></span><br><span class="line">                                      <span class="string">&quot;background-color: rgb(46, 46, 46); &#125;&quot;</span>); <span class="comment">// 启用悬停颜色变化</span></span><br><span class="line">        <span class="built_in">connect</span>(maximizeButton, &amp;QPushButton::clicked, <span class="keyword">this</span>, &amp;INS_TitleBar::maximizeOrRestoreWindow);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加关闭按钮</span></span><br><span class="line">        QPushButton *closeButton = <span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="string">u8&quot;×&quot;</span>, <span class="keyword">this</span>);</span><br><span class="line">        closeButton-&gt;<span class="built_in">setFixedSize</span>(size);</span><br><span class="line">        layout-&gt;<span class="built_in">addWidget</span>(closeButton);</span><br><span class="line">        closeButton-&gt;<span class="built_in">setStyleSheet</span>(<span class="string">&quot;QPushButton&#123;background:black; &quot;</span></span><br><span class="line">                                   <span class="string">&quot;border:none;border-radius:3px; &quot;</span></span><br><span class="line">                                   <span class="string">&quot;color:rgb(241, 241, 241);&#125;&quot;</span></span><br><span class="line">                                   <span class="string">&quot;QPushButton:hover &#123; &quot;</span></span><br><span class="line">                                   <span class="string">&quot;background-color: rgb(46, 46, 46); &#125;&quot;</span>); <span class="comment">// 启用悬停颜色变化</span></span><br><span class="line">        <span class="built_in">connect</span>(closeButton, &amp;QPushButton::clicked, <span class="keyword">this</span>, &amp;INS_TitleBar::closeWindow);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        layoutV-&gt;<span class="built_in">addLayout</span>(layout);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<ul>
+<li>🏆 <code>mainwindow</code> 的 <code>new_titlebar_init()</code> 函数<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::new_titlebar_init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">setWindowFlags</span>(Qt::FramelessWindowHint); <span class="comment">// 隐藏原有标题栏</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建自定义标题栏</span></span><br><span class="line">    INS_TitleBar *titleBar = <span class="keyword">new</span> <span class="built_in">INS_TitleBar</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    QMenuBar *menuBar = <span class="keyword">this</span>-&gt;ui-&gt;menuBar; <span class="comment">// 获取菜单栏</span></span><br><span class="line"></span><br><span class="line">    titleBar-&gt;layout2-&gt;<span class="built_in">addWidget</span>(menuBar);</span><br><span class="line">    titleBar-&gt;layoutV-&gt;<span class="built_in">addLayout</span>(titleBar-&gt;layout2);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">setMenuWidget</span>(titleBar);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//// 自定义标题栏的信号连接到相应的槽函数</span></span><br><span class="line">    QObject::<span class="built_in">connect</span>(titleBar, &amp;INS_TitleBar::minimizeClicked, <span class="keyword">this</span>, &amp;QMainWindow::showMinimized);</span><br><span class="line">    QObject::<span class="built_in">connect</span>(titleBar, &amp;INS_TitleBar::maximizeOrRestoreClicked, [=]()&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>-&gt;<span class="built_in">isMaximized</span>()) &#123;</span><br><span class="line">            <span class="built_in">handleNormalEvent</span>();<span class="comment">//函数内部有this-&gt;showNormal();</span></span><br><span class="line">            <span class="comment">//qDebug() &lt;&lt; &quot;showNormal&quot; &lt;&lt; this-&gt;windowState();</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//在Qt 5.14版本之后，QDesktopWidget已经被弃用</span></span><br><span class="line">            <span class="comment">//QRect desktopRect = QApplication::desktop()-&gt;availableGeometry(); // 获取屏幕的工作区尺寸</span></span><br><span class="line">            QScreen *primaryScreen = QGuiApplication::<span class="built_in">primaryScreen</span>();</span><br><span class="line">            QRect desktopRect = primaryScreen-&gt;<span class="built_in">availableGeometry</span>(); <span class="comment">// 获取主屏幕的工作区尺寸</span></span><br><span class="line">            </span><br><span class="line">            QRect windowRect = <span class="keyword">this</span>-&gt;<span class="built_in">geometry</span>(); <span class="comment">// 获取mainwindow窗口的几何信息</span></span><br><span class="line">            <span class="keyword">if</span> (windowRect.<span class="built_in">size</span>() == desktopRect.<span class="built_in">size</span>()) &#123;</span><br><span class="line">                <span class="keyword">this</span>-&gt;<span class="built_in">setGeometry</span>(desktopRect);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">handleMaximizeEvent</span>();<span class="comment">//函数内部有this-&gt;showMaximized();</span></span><br><span class="line">            <span class="comment">//qDebug() &lt;&lt; &quot;showMaximized&quot;&lt;&lt; this-&gt;windowState();</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    QObject::<span class="built_in">connect</span>(titleBar, &amp;INS_TitleBar::closeClicked, <span class="keyword">this</span>, &amp;QApplication::quit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::handleMaximizeEvent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//其他窗口处理</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">showMaximized</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::handleNormalEvent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//其他窗口处理</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">showNormal</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Yzi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://yzi321.github.io/2023/09/12/qt-create-my-titlebar/">https://yzi321.github.io/2023/09/12/qt-create-my-titlebar/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/qt/"># qt</a>
+                    
+                        <a href="/tags/titlebar/"># titlebar</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2023/09/12/vscode-mouse-change/">VSCode编辑器，实现鼠标放大缩小文本编辑器的功能</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Yzi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
