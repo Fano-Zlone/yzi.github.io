@@ -13,7 +13,7 @@
 
 
 
-<title>Qt定位Release下运行崩溃的位置 | Hexo</title>
+<title>Qt 的 .pro 文件条件配置与条件编译 | Hexo</title>
 
 
 
@@ -286,7 +286,7 @@ i()
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Qt定位Release下运行崩溃的位置</h1>
+            <h1 class="post-title">Qt 的 .pro 文件条件配置与条件编译</h1>
             
                 <div class="post-meta">
                     
@@ -295,7 +295,7 @@ i()
 
                     
                         <span class="post-time">
-                        Date: <a href="#">September 22, 2023&nbsp;&nbsp;22:52:51</a>
+                        Date: <a href="#">September 22, 2023&nbsp;&nbsp;23:19:14</a>
                         </span>
                     
                     
@@ -311,37 +311,22 @@ i()
         </header>
 
         <div class="post-content">
-            <h2 id="Qt-使用-qBreakpad-定位崩溃位置"><a href="#Qt-使用-qBreakpad-定位崩溃位置" class="headerlink" title="Qt 使用 qBreakpad 定位崩溃位置"></a>Qt 使用 qBreakpad 定位崩溃位置</h2><blockquote>
-<p><code>MSVC_2015_Release</code>和<code>MSVC_2017_Release</code>可以直接使用，其他版本还需看<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43627907/article/details/126603907">博主 mahuifa 的分享</a></p>
-</blockquote>
-<ol>
-<li><p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1mYlXl3heaVNQ6NTQMyUTdA?pwd=8888">下载 <code>qBreakpad</code> 资源包</a></p>
-</li>
-<li><p>将解压的<code>qBreakpad</code>文件夹放置在项目目录下</p>
-<p><img src="/image/qBreakpad/image.png" alt="Alt text"></p>
-</li>
-<li><p>在项目的.pro 文件中，添加如下代码</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">include</span>(./qBreakpad/qBreakpad.pri)</span><br><span class="line">INCLUDEPATH += $$PWD/qBreakpad</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在 <code>main.cpp</code> 文件中添加头文件</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;QBreakpadHandler.h&quot;</span></span></span><br></pre></td></tr></table></figure>
+            <h1 id="Qt-的-pro-文件条件配置与条件编译"><a href="#Qt-的-pro-文件条件配置与条件编译" class="headerlink" title="Qt 的 .pro 文件条件配置与条件编译"></a>Qt 的 .pro 文件条件配置与条件编译</h1><h3 id="一、通过DEFINES定义宏"><a href="#一、通过DEFINES定义宏" class="headerlink" title="一、通过DEFINES定义宏"></a>一、通过<code>DEFINES</code>定义宏</h3><p>使用<code>DEFINES</code>进行宏定义</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEFINES  +=  MY_DEF</span><br></pre></td></tr></table></figure>
 
-<p>同时在 main 函数中添加下面函数</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QBreakpadInstance.<span class="built_in">setDumpPath</span>(<span class="string">&quot;crashes&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>使用<code>contains</code>判断是否定义宏</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">contains</span>(DEFINES,MY_DEF)&#123;</span><br><span class="line">    <span class="built_in">message</span>(<span class="string">&#x27;MY_DEF&#x27;</span>)</span><br><span class="line">    # ...</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">message</span>(<span class="string">&#x27;nothing&#x27;</span>)</span><br><span class="line">    # ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/qBreakpad/image-1.png" alt="Alt text"></p>
-</li>
-<li><p>在<code>Release</code>下运行</p>
-</li>
-<li><p>当出现 exe 程序奔溃或异常时，进入编译后的文件夹下，可以看见成功生成 pdb 符号文件和 dmp 文件。<br><img src="/image/qBreakpad/image-2.png" alt="Alt text"></p>
-</li>
-<li><p>在 Qt 界面，选择【调试】-&gt;【开始调试】-&gt;【载入核心文件】</p>
-</li>
-<li><p>选择生成的 <strong>dmp</strong> 文件和 <strong>可执行程序</strong> ，然后点击【OK】；<br><img src="/image/qBreakpad/image-3.png" alt="Alt text"></p>
-</li>
-<li><p>在窗口下方选择序号最小的，工程中包含的文件，即可找到崩溃的原因。</p>
-</li>
-</ol>
+<p>或者</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DEFINES += MY_DEF</span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">contains</span>(DEFINES, MY_DEF)) &#123; <span class="meta">#contains和&#123;必须在同一行，否则报错</span></span><br><span class="line">	CONFIG += MY_DEF</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	CONFIG += MY_DEF_2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、通过CONFIG配置"><a href="#二、通过CONFIG配置" class="headerlink" title="二、通过CONFIG配置"></a>二、通过<code>CONFIG</code>配置</h3><p>使用<code>CONFIG</code>进行宏定义</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CONFIG += MY_DEF</span><br></pre></td></tr></table></figure>
+
+<p>条件判断</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">MY_DEF &#123;</span><br><span class="line">    <span class="built_in">message</span>(<span class="string">&#x27;MY_DEF&#x27;</span>)</span><br><span class="line">    # ...</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">message</span>(<span class="string">&#x27;nothing&#x27;</span>)</span><br><span class="line">    # ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xqligong/article/details/115110680">详解请参考博主 dreamwatchman 的分享</a></p>
 
         </div>
 
@@ -356,7 +341,7 @@ i()
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://yzi321.github.io/2023/09/22/qBreakpad/">https://yzi321.github.io/2023/09/22/qBreakpad/</a></span>
+                        <span><a href="https://yzi321.github.io/2023/09/22/Qt-pro-config/">https://yzi321.github.io/2023/09/22/Qt-pro-config/</a></span>
                     </p>
                 
                 
@@ -382,7 +367,9 @@ i()
                     
                         <a href="/tags/qt/"># qt</a>
                     
-                        <a href="/tags/%E5%B4%A9%E6%BA%83/"># 崩溃</a>
+                        <a href="/tags/define/"># define</a>
+                    
+                        <a href="/tags/%E5%AE%8F%E5%AE%9A%E4%B9%89/"># 宏定义</a>
                     
                         
                 </span>
@@ -395,10 +382,8 @@ i()
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/09/22/Qt-pro-config/">Qt 的 .pro 文件条件配置与条件编译</a>
             
-            
-            <a class="next" rel="next" href="/2023/09/22/Eventfilter/">QEventfilter 事件过滤器的使用</a>
+            <a class="next" rel="next" href="/2023/09/22/qBreakpad/">Qt定位Release下运行崩溃的位置</a>
             
         </section>
 
