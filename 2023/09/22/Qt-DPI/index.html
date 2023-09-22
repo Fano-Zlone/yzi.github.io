@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Yzi">
+
+
+
+
+
+<title>Qt在高分屏下的缩放显示问题 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+        !
+        function() {
+        function n(n, e, t) {
+        return n.getAttribute(e) || t
+        }
+        function e(n) {
+        return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+o = t.length,
+i = t[o - 1];
+return {
+l: o,
+z: n(i, "zIndex", -1), //置于主页面背后
+o: n(i, "opacity", .5), //线条透明度
+c: n(i, "color", "0,0,0"), //线条颜色
+n: n(i, "count", 100) //线条数量
+}
+}
+function o() {
+a = m.width = window.innerWidth ||
+document.documentElement.clientWidth || document.body.clientWidth,
+c = m.height = window.innerHeight ||
+document.documentElement.clientHeight || document.body.clientHeight
+}
+function i() {
+r.clearRect(0, 0, a, c);
+var n, e, t, o, m, l;
+s.forEach(function(i, x) {
+for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+}),
+x(i)
+}
+var a, c, u, m = document.createElement("canvas"),
+d = t(),
+l = "c_n" + d.l,
+r = m.getContext("2d"),
+x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+function(n) {
+window.setTimeout(n, 1e3 / 45)
+},
+w = Math.random,
+y = {
+x: null,
+y: null,
+max: 2e4
+};
+m.id = l,
+m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+e("body")[0].appendChild(m),
+o(),
+window.onresize = o,
+window.onmousemove = function(n) {
+n = n || window.event,
+y.x = n.clientX,
+y.y = n.clientY
+},
+window.onmouseout = function() {
+y.x = null,
+y.y = null
+};
+for (var s = [], f = 0; d.n > f; f++) {
+var h = w() * a,
+g = w() * c,
+v = 2 * w() - 1,
+p = 2 * w() - 1;
+s.push({
+x: h,
+y: g,
+xa: v,
+ya: p,
+max: 6e3
+})
+}
+u = s.concat([y]),
+setTimeout(function() {
+i()
+},
+100)
+} ();
+</script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Yzi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Yzi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Qt在高分屏下的缩放显示问题</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Yzi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 22, 2023&nbsp;&nbsp;22:47:19</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Qt/">Qt</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="关于-qt-运行窗口和-qt-设计师绘制的不一致的问题-高分屏下缩放显示"><a href="#关于-qt-运行窗口和-qt-设计师绘制的不一致的问题-高分屏下缩放显示" class="headerlink" title="关于 qt 运行窗口和 qt 设计师绘制的不一致的问题(高分屏下缩放显示)"></a>关于 qt 运行窗口和 qt 设计师绘制的不一致的问题(高分屏下缩放显示)</h1><hr>
+<h3 id="1-设置缩放比例"><a href="#1-设置缩放比例" class="headerlink" title="1. 设置缩放比例"></a>1. 设置缩放比例</h3><p>如果在 main 函数的首行通过类似下面的代码设置缩放比例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qputenv(<span class="string">&quot;QT_SCALE_FACTOR&quot;</span>, <span class="string">&quot;1.25&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>那么界面可以以正常尺寸显示了，但是在有些电脑上会显示莫名其面的虚框，如下图所示：<img src="/image/Qt-DPI/1695394825230.png" alt="Alt text"></p>
+<p>这些断断续续的、多彩的边框有的时候鼠标移入的时候出现，有的时候 focus 的时候出现，有的时候无缘无故就出现了有的时候出现在 QPushButton 上，有的时候出现在 <code>QLineEdit</code>上，也会出现在 <code>QWidget</code>上起初以为是样式的问题，但你尝试各种手段都无法把它去掉</p>
+<h3 id="2-调用-Qt-的高分屏"><a href="#2-调用-Qt-的高分屏" class="headerlink" title="2. 调用 Qt 的高分屏"></a>2. 调用 Qt 的高分屏</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">APIQCoreApplication::<span class="built_in">setAttribute</span>(Qt::AA_EnableHighDpiScaling);</span><br></pre></td></tr></table></figure>
+
+<p>一旦你设置了这个，前面说的五彩的边框就没有了但是：通过 <code>qputenv(&quot;QT_SCALE_FACTOR&quot;, &quot;1.25&quot;);</code>设置缩放比例的代码又不生效了</p>
+<h3 id="3-DPI-识别"><a href="#3-DPI-识别" class="headerlink" title="3. DPI 识别"></a>3. DPI 识别</h3><p>VisualStudio</p>
+<p>工程-&gt;属性-&gt;清单工具-&gt;输入和输出-&gt;DPI 识别功能，</p>
+<p>设置为：</p>
+<p><code>每个监视器高DPI识别</code></p>
+<p>没啥效果</p>
+<h3 id="4-WindowsArgument"><a href="#4-WindowsArgument" class="headerlink" title="4. WindowsArgument"></a>4. WindowsArgument</h3><p>应用资源（:&#x2F;qt&#x2F;etc&#x2F;qt.conf），设置内容为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Platforms]</span><br><span class="line">WindowsArguments=dpiawareness=0;</span><br></pre></td></tr></table></figure>
+
+<p>会导致界面模糊</p>
+<h3 id="5-升级-Qt-版本"><a href="#5-升级-Qt-版本" class="headerlink" title="5. 升级 Qt 版本"></a>5. 升级 Qt 版本</h3><p>把 Qt 版本升级到 <code>5.15.x</code>，再调一个支持 HightDPI 的接口，一定程度上解决了上述所有问题。</p>
+<p>但是不同分辨率下 gif 图片会出现锯齿、模糊！自己用 qt api 做的动画，也会有拖影。</p>
+<p>此时唯一的应对方案就是禁用自适应分辨率的缩放！</p>
+<p>下面代码是 <code>5.15.x</code></p>
+<p>启用缩放的代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> Q_OS_WIN32</span></span><br><span class="line">QCoreApplication::<span class="built_in">setAttribute</span>(Qt::AA_EnableHighDpiScaling);</span><br><span class="line">QCoreApplication::<span class="built_in">setAttribute</span>(Qt::AA_UseHighDpiPixmaps);</span><br><span class="line">QGuiApplication::<span class="built_in">setHighDpiScaleFactorRoundingPolicy</span>(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-Qt6-2-3"><a href="#6-Qt6-2-3" class="headerlink" title="6. Qt6.2.3"></a>6. Qt6.2.3</h3><p>最近简单试过 <code>Qt6.2.3</code>上述问题应该是已经都解决掉了的。</p>
+<hr>
+<h2 id="笔者的使用情况"><a href="#笔者的使用情况" class="headerlink" title="笔者的使用情况"></a>笔者的使用情况</h2><blockquote>
+<p>QT 版本：5.15.2<br>我的设备：</p>
+<ol>
+<li>设备 1<br> 系统：win11<br> 显示器：2560 x 1600<br> 缩放：150%</li>
+<li>设备 2<br>系统：win10<br>显示器：3840 x 2160<br>缩放：150%</li>
+</ol>
+</blockquote>
+<h3 id="1-方式一：可以实现所见即所得"><a href="#1-方式一：可以实现所见即所得" class="headerlink" title="1.方式一：可以实现所见即所得"></a>1.方式一：可以实现所见即所得</h3><p>此方法可以实现，在 qt 上什么尺寸就是什么样子，但是在设备二上会出现尺寸过大————</p>
+<p>因为设备 2 的屏幕尺寸大，当设备 1 的 release 版放置在设备 2 上时会出现尺寸过大的情况</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(QT_VERSION&gt;=<span class="built_in">QT_VERSION_CHECK</span>(<span class="number">5</span>,<span class="number">6</span>,<span class="number">0</span>))</span><br><span class="line">       QCoreApplication::<span class="built_in">setAttribute</span>(Qt::AA_EnableHighDpiScaling );</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-方式二：效果最好"><a href="#2-方式二：效果最好" class="headerlink" title="2.方式二：效果最好"></a>2.方式二：效果最好</h3><p>此方法，要求 qt 版本在 5.15.x，</p>
+<p>下面代码能够让所有窗口的尺寸正好。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">QCoreApplication::<span class="built_in">setAttribute</span>(Qt::AA_EnableHighDpiScaling);</span><br><span class="line">QCoreApplication::<span class="built_in">setAttribute</span>(Qt::AA_UseHighDpiPixmaps);</span><br><span class="line">QGuiApplication::<span class="built_in">setHighDpiScaleFactorRoundingPolicy</span>(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>注：</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/451021591/answer/1896642195">搬运自知乎博主 liulun 的回答</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/swarmbees/p/12004594.html#%E4%B8%89qt%E9%80%82%E9%85%8D">参考自博主 朝十晚八 的分享</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Yzi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://yzi321.github.io/2023/09/22/Qt-DPI/">https://yzi321.github.io/2023/09/22/Qt-DPI/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/qt/"># qt</a>
+                    
+                        <a href="/tags/dpi/"># dpi</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2023/09/22/Eventfilter/">QEventfilter 事件过滤器的使用</a>
+            
+            
+            <a class="next" rel="next" href="/2023/09/12/qt-create-my-titlebar/">实现自定义qt标题栏，替代原有标题</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Yzi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
