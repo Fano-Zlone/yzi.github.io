@@ -315,7 +315,7 @@ i()
 <h3 id="1-设置缩放比例"><a href="#1-设置缩放比例" class="headerlink" title="1. 设置缩放比例"></a>1. 设置缩放比例</h3><p>如果在 main 函数的首行通过类似下面的代码设置缩放比例</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qputenv(<span class="string">&quot;QT_SCALE_FACTOR&quot;</span>, <span class="string">&quot;1.25&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-<p>那么界面可以以正常尺寸显示了，但是在有些电脑上会显示莫名其面的虚框，如下图所示：<img src="/image/Qt-DPI/1695394825230.png" alt="Alt text"></p>
+<p>那么界面可以以正常尺寸显示了，但是在有些电脑上会显示莫名其面的虚框，如下图所示：<img src="https://yzi321.github.io/2023/09/22/image/Qt-DPI/1695394825230.png" alt="Alt text"></p>
 <p>这些断断续续的、多彩的边框有的时候鼠标移入的时候出现，有的时候 focus 的时候出现，有的时候无缘无故就出现了有的时候出现在 QPushButton 上，有的时候出现在 <code>QLineEdit</code>上，也会出现在 <code>QWidget</code>上起初以为是样式的问题，但你尝试各种手段都无法把它去掉</p>
 <h3 id="2-调用-Qt-的高分屏"><a href="#2-调用-Qt-的高分屏" class="headerlink" title="2. 调用 Qt 的高分屏"></a>2. 调用 Qt 的高分屏</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">APIQCoreApplication::<span class="built_in">setAttribute</span>(Qt::AA_EnableHighDpiScaling);</span><br></pre></td></tr></table></figure>
 
